@@ -11,16 +11,15 @@
     body, html {
       width: 100%;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f9f9f9;
       margin: 0;
       overflow: hidden;
     }
 
     .loader {
-      position: relative;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 80px;
       height: 80px;
     }
@@ -70,17 +69,37 @@
       font-family: 'Segoe UI', sans-serif;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+
+    /* 新增的容器样式，确保目标内容占据完整页面 */
+    #content {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .target-content {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      overflow: auto;
+      background-color: #fff;
+    }
   </style>
 </head>
 <body>
-  <div id="content">
-    <div class="loader">
-      <svg width="80" height="80">
-        <circle class="track" r="35" cx="40" cy="40"></circle>
-        <circle class="progress" r="35" cx="40" cy="40"></circle>
-      </svg>
-      <div class="percent-text" id="percent">0%</div>
-    </div>
+  <div class="loader">
+    <svg width="80" height="80">
+      <circle class="track" r="35" cx="40" cy="40"></circle>
+      <circle class="progress" r="35" cx="40" cy="40"></circle>
+    </svg>
+    <div class="percent-text" id="percent">0%</div>
+  </div>
+
+  <div id="content" style="display: none;">
+    <div class="target-content" id="targetContent"></div>
   </div>
 
   <script>
@@ -127,8 +146,15 @@
         updateProgress(100);
         clearInterval(timer);
 
-        // 使用innerHTML避免document.write引起的白屏问题
-        document.getElementById("content").innerHTML = data.html;
+        // 隐藏加载动画并展示目标内容
+        document.querySelector('.loader').style.display = 'none';
+        const targetContent = document.getElementById("targetContent");
+        
+        // 使用innerHTML插入目标内容
+        targetContent.innerHTML = data.html;
+
+        // 显示内容容器
+        document.getElementById("content").style.display = 'flex';
 
       } catch (error) {
         console.error('请求失败:', error);
