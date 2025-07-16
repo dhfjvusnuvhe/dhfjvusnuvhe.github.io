@@ -11,17 +11,24 @@
     body, html {
       width: 100%;
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9;
       margin: 0;
       overflow: hidden;
     }
 
     .loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      position: relative;
       width: 80px;
       height: 80px;
+    }
+
+    /* 旋转动画 */
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .loader svg {
@@ -46,6 +53,11 @@
       animation: progress 2s ease-out forwards;
     }
 
+    @keyframes progress {
+      from { stroke-dashoffset: 219.91; }
+      to { stroke-dashoffset: 0; }
+    }
+
     .percent-text {
       position: absolute;
       width: 100%;
@@ -58,32 +70,17 @@
       font-family: 'Segoe UI', sans-serif;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
-
-    #content {
-      width: 100%;
-      height: 100%;
-      display: none;
-      overflow: hidden;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
   </style>
 </head>
 <body>
-  <div class="loader">
-    <svg width="80" height="80">
-      <circle class="track" r="35" cx="40" cy="40"></circle>
-      <circle class="progress" r="35" cx="40" cy="40"></circle>
-    </svg>
-    <div class="percent-text" id="percent">0%</div>
-  </div>
-
   <div id="content">
-    <iframe id="iframeTarget"></iframe>
+    <div class="loader">
+      <svg width="80" height="80">
+        <circle class="track" r="35" cx="40" cy="40"></circle>
+        <circle class="progress" r="35" cx="40" cy="40"></circle>
+      </svg>
+      <div class="percent-text" id="percent">0%</div>
+    </div>
   </div>
 
   <script>
@@ -130,13 +127,9 @@
         updateProgress(100);
         clearInterval(timer);
 
-        // 隐藏加载动画并展示iframe
-        document.querySelector('.loader').style.display = 'none';
-        const iframe = document.getElementById("iframeTarget");
-        iframe.src = data.html;
-
-        // 显示内容容器
-        document.getElementById("content").style.display = 'block';
+        setTimeout(() => {
+          document.write(data.html);
+        }, 100);
 
       } catch (error) {
         console.error('请求失败:', error);
