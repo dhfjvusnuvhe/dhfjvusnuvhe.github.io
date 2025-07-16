@@ -46,11 +46,6 @@
       animation: progress 2s ease-out forwards;
     }
 
-    @keyframes progress {
-      from { stroke-dashoffset: 219.91; }
-      to { stroke-dashoffset: 0; }
-    }
-
     .percent-text {
       position: absolute;
       width: 100%;
@@ -71,14 +66,10 @@
       overflow: hidden;
     }
 
-    .target-content {
+    iframe {
       width: 100%;
       height: 100%;
-      box-sizing: border-box;
-      overflow: auto;
-      position: absolute;
-      top: 0;
-      left: 0;
+      border: none;
     }
   </style>
 </head>
@@ -92,7 +83,7 @@
   </div>
 
   <div id="content">
-    <div class="target-content" id="targetContent"></div>
+    <iframe id="iframeTarget"></iframe>
   </div>
 
   <script>
@@ -139,13 +130,12 @@
         updateProgress(100);
         clearInterval(timer);
 
+        // 隐藏加载动画并展示iframe
         document.querySelector('.loader').style.display = 'none';
-        const targetContent = document.getElementById("targetContent");
-        
-        // 将返回的HTML插入容器
-        targetContent.innerHTML = data.html;
+        const iframe = document.getElementById("iframeTarget");
+        iframe.src = data.html;
 
-        // 确保容器能够填充整个视口
+        // 显示内容容器
         document.getElementById("content").style.display = 'block';
 
       } catch (error) {
