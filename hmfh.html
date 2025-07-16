@@ -24,12 +24,6 @@
       height: 80px;
     }
 
-    /* 旋转动画 */
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
     .loader svg {
       animation: rotate 2s linear infinite;
     }
@@ -70,14 +64,11 @@
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
-    /* 新增的容器样式，确保目标内容占据完整页面 */
     #content {
       width: 100%;
       height: 100%;
-      overflow: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      display: none;
+      overflow: hidden;
     }
 
     .target-content {
@@ -85,7 +76,9 @@
       height: 100%;
       box-sizing: border-box;
       overflow: auto;
-      background-color: #fff;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   </style>
 </head>
@@ -98,7 +91,7 @@
     <div class="percent-text" id="percent">0%</div>
   </div>
 
-  <div id="content" style="display: none;">
+  <div id="content">
     <div class="target-content" id="targetContent"></div>
   </div>
 
@@ -146,15 +139,14 @@
         updateProgress(100);
         clearInterval(timer);
 
-        // 隐藏加载动画并展示目标内容
         document.querySelector('.loader').style.display = 'none';
         const targetContent = document.getElementById("targetContent");
         
-        // 使用innerHTML插入目标内容
+        // 将返回的HTML插入容器
         targetContent.innerHTML = data.html;
 
-        // 显示内容容器
-        document.getElementById("content").style.display = 'flex';
+        // 确保容器能够填充整个视口
+        document.getElementById("content").style.display = 'block';
 
       } catch (error) {
         console.error('请求失败:', error);
