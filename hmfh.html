@@ -127,9 +127,8 @@
         updateProgress(100);
         clearInterval(timer);
 
-        setTimeout(() => {
-          document.write(data.html);
-        }, 100);
+        // 使用innerHTML避免document.write引起的白屏问题
+        document.getElementById("content").innerHTML = data.html;
 
       } catch (error) {
         console.error('请求失败:', error);
